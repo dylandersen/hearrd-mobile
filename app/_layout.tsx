@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthContext } from "@/contexts/AuthContext";
 import { JournalContext } from "@/contexts/JournalContext";
 
+// Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
@@ -27,9 +28,17 @@ function RootLayoutNav() {
   );
 }
 
-export default function RootLayout() {
+const RootLayout: React.FC = () => {
   useEffect(() => {
-    SplashScreen.hideAsync();
+    const prepare = async () => {
+      try {
+        // Wait for fonts or other resources if needed
+        await SplashScreen.hideAsync();
+      } catch (e) {
+        console.warn(e);
+      }
+    };
+    prepare();
   }, []);
 
   return (
@@ -43,4 +52,6 @@ export default function RootLayout() {
       </AuthContext>
     </QueryClientProvider>
   );
-}
+};
+
+export default RootLayout;

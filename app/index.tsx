@@ -5,8 +5,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import AnimatedGradientBackground from '@/components/AnimatedGradientBackground';
 
 export default function Index() {
-  const { user, isLoading } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
+  
+  // Safely destructure with defaults
+  const user = auth?.user ?? null;
+  const isLoading = auth?.isLoading ?? true;
 
   useEffect(() => {
     if (!isLoading) {
